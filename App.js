@@ -60,10 +60,11 @@ const Image = styled.Image`
   resize-mode: contain;
 `;
 
+const where = new Animated.Value(0.5);
+const yesScaling = new Animated.Value(1);
+const noScaling = new Animated.Value(1);
+
 export default function App() {
-  const where = new Animated.Value(0.5);
-  const yesScaling = new Animated.Value(1);
-  const noScaling = new Animated.Value(1);
   const [expanded, setExpanded] = React.useState(false);
 
   const leftWidthInterpolation = where.interpolate({
@@ -86,13 +87,7 @@ export default function App() {
     const shrink = Animated.timing(scaling, {
       toValue: 0.8,
       easing: Easing.bounce,
-      duration: 200,
-      useNativeDriver: true,
-    });
-    const grow = Animated.timing(scaling, {
-      toValue: 1,
-      easing: Easing.bounce,
-      duration: 200,
+      duration: 100,
       useNativeDriver: true,
     });
     const expand = Animated.spring(where, {
@@ -101,13 +96,14 @@ export default function App() {
     });
     Animated.sequence([
       shrink,
-      grow,
       expand,
     ]).start(() => { setExpanded(true); })
   };
 
   const reset = () => {
     where.setValue(0.5);
+    yesScaling.setValue(1);
+    noScaling.setValue(1);
     setExpanded(false);
   };
 
